@@ -11,9 +11,9 @@
     <body>
         <!--Create at top of page will want to center text and change colors later-->
         <nav class="navbar navbar-light bg-light">
-            <span class="navbar-text">
+            <h1 class="navbar-text">
                 Weather Dashboard
-            </span>
+            </h1>
         </nav>
 
         <!--Split the body into two sections-->
@@ -21,7 +21,7 @@
             <div class="row">
                 <!--First Column will hold a serach bar and growing list-->
                 <div class="col-3">
-                    <p>Search for a City: </p>
+                    <h3>Search for a City: </h3>
                     <div class="row">
                         <div class="col-12">
                             <div class="input-group mb-3">
@@ -32,10 +32,32 @@
                               </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="list-group">
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!--Second Column will hold the current weather and 5 day forecast at the searched or clicked city-->
-                <div class="col-9">
-
+                <div class="col-7 offset-2">
+                    <div class="row">
+                        <div class="col">
+                            <h3 id="currentCity">Current City</h3>
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <h4>5-Day Forecast:</h4>
+                        </div>
+                    </div>
+                    <!--Row to hold cards of 5 day forecast-->
+                    <div class="row">
+                        
+                    </div>
                 </div>
             </div>
         </div>
