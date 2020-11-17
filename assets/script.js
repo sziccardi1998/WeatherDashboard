@@ -2,6 +2,10 @@
 var searchedCities = $("#searchedCities");
 var citySearch = $("#citySearch");
 var apiKey = "4e4e3d0562345975cee7799375ccc83a";
+var tempEle = $("#temp");
+var humidEle = $("#humid");
+var windEle = $("#wind");
+var uvEle = $("#uv");
 
 // test to check input group
 $("#searchBtn").on("click", function(event){
@@ -32,7 +36,14 @@ $("#searchBtn").on("click", function(event){
         method: "GET"
     }).then(function(response){
         console.log(response);
-    })
+        var temperature = (response.main.temp - 273.15) * 1.80 + 32;
+        tempEle.text("Temperature: " + temperature.toFixed(1) + " F");
+        var humidityRel = response.main.humidity;
+        humidEle.text("Humidity: " + humidityRel + "%");
+        var windSpeed = response.wind.speed * 2.237;
+        windEle.text("Wind Speed: " + windSpeed + " MPH");
+
+    });
 });
 
 
