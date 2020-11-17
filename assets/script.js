@@ -8,23 +8,33 @@ $("#searchBtn").on("click", function(event){
     event.preventDefault();
     var city = citySearch.val();
     console.log(city);
+    
 });
 
 // searched cities added to page as button
 $("#searchBtn").on("click", function(event){
     event.preventDefault();
     var city = citySearch.val();
+    city=city.trim();
     var newButton = $("<a>");
     newButton.addClass("list-group-item").addClass("list-group-item-action");
     newButton.text(city);
     searchedCities.append(newButton);
     citySearch.val("");
     newButton.attr("id", city);
+
+    // city searched in OpenWeather
+
+    var search = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
+
+    $.ajax({
+        url: search,
+        method: "GET"
+    }).then(function(response){
+        console.log(response);
+    })
 });
 
-// create function to add searched cities as buttons
-
-// create function to search OpenWeather for the searched city
 
 // create function to create cards out of the 5-day forecast
 
