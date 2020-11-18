@@ -46,13 +46,12 @@ $("#searchBtn").on("click", function(event){
         windEle.text("Wind Speed: " + windSpeed + " MPH");
 
         // get and set current date
+        console.log(response.dt);
         var startDate = Date(response.dt);
-        console.log(startDate);
-        var day = startDate.getDate();
-        var month = startDate.getMonth() +1;
-        var year = startDate.getFullYear();
+        var displayDate = startDate.slice(4,15);
+        console.log(displayDate);
 
-        currentCity.text(response.name + " (" + month + "/" + day + "/" + year + ")");
+        currentCity.text(response.name + " (" + displayDate + ")");
         latitude = response.coord.lat;
         longitude = response.coord.lon;
         var uvSearch = "http://api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&appid=" + apiKey;
