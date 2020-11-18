@@ -27,10 +27,13 @@ $("#searchBtn").on("click", function(event){
     searchedCities.append(newButton);
     citySearch.val("");
     newButton.attr("id", city);
+    cityWeather(city);
 
-    // city searched in OpenWeather
+});
 
-    var search = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
+// create function to handle ajax calls
+function cityWeather(searchTerm) {
+    var search = "https://api.openweathermap.org/data/2.5/weather?q=" + searchTerm + "&appid=" + apiKey;
 
     $.ajax({
         url: search,
@@ -66,10 +69,15 @@ $("#searchBtn").on("click", function(event){
 
         })
     });
-
-});
-
+}
 
 // create function to create cards out of the 5-day forecast
 
 // create function that changes the displayed city with a button click
+$(".list-group-item-action").on("click", function(event){
+    event.stopPropogation();
+    event.preventDefault();
+    var nextCity = this.attr("id");
+    console.log(nextCity);
+    cityWeather(nextCity);
+});
