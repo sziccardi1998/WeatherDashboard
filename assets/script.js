@@ -66,6 +66,7 @@ function cityWeather(searchTerm) {
     }).then(function (response) {
       console.log(response);
       uvEle.text(response.value);
+      uvCheck();
     });
   });
 }
@@ -79,3 +80,30 @@ $(document).on("click", ".list-group-item", function (event) {
   console.log(newCity);
   cityWeather(newCity);
 });
+
+
+// create function to change the styling of the UV index to match conditions
+function uvCheck(){
+  var uvIndex = uvEle.text();
+  console.log(uvIndex);
+  if(parseFloat(uvIndex) < 3){
+    // change color to green
+    uvEle.addClass("green");
+  }
+  else if (((parseFloat(uvIndex))>= 3)&&(parseFloat(uvIndex) < 6)){
+    // change color to yellow
+    uvEle.addClass("yellow");
+  } 
+  else if((parseFloat(uvIndex)>=6)&&(parseFloat(uvIndex) < 8)){
+    // change color to orange
+    uvEle.addClass("orange");
+  }
+  else if((parseFloat(uvIndex)>=8)&&(parseFloat(uvIndex) <= 10)){
+    // change color to red
+    uvEle.addClass("red");
+  }
+  else if(parseFloat(uvIndex)> 10){
+    // change color to violet
+    uvEle.addClass("violet");
+  }
+}
