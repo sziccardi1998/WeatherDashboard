@@ -42,7 +42,7 @@ function cityWeather(searchTerm) {
     var humidityRel = response.main.humidity;
     humidEle.text("Humidity: " + humidityRel + "%");
     var windSpeed = response.wind.speed * 2.237;
-    windEle.text("Wind Speed: " + windSpeed + " MPH");
+    windEle.text("Wind Speed: " + windSpeed.toFixed(1) + " MPH");
 
     // get and set current date
     console.log(response.dt);
@@ -50,7 +50,11 @@ function cityWeather(searchTerm) {
     var displayDate = startDate.slice(4, 15);
     console.log(displayDate);
 
+   // create img to hold weather icon
+   var weatherIcon = $("<img>").attr("src", "https:///openweathermap.org/img/w/" + response.weather[0].icon + ".png");
+
     currentCity.text(response.name + " (" + displayDate + ")");
+    currentCity.append(weatherIcon);
     latitude = response.coord.lat;
     longitude = response.coord.lon;
     var uvSearch =
@@ -73,6 +77,7 @@ function cityWeather(searchTerm) {
 
 // create function to create cards out of the 5-day forecast
 
+
 // create function that changes the displayed city with a button click
 $(document).on("click", ".list-group-item", function (event) {
     event.stopPropagation();
@@ -86,23 +91,24 @@ $(document).on("click", ".list-group-item", function (event) {
 function uvCheck(){
   var uvIndex = uvEle.text();
   console.log(uvIndex);
+  uvEle.attr("class", "");
   if(parseFloat(uvIndex) < 3){
     // change color to green
     uvEle.addClass("green");
   }
-  else if (((parseFloat(uvIndex))>= 3)&&(parseFloat(uvIndex) < 6)){
+  else if (((parseFloat(uvIndex))>= 3.0)&&(parseFloat(uvIndex) < 6.0)){
     // change color to yellow
     uvEle.addClass("yellow");
   } 
-  else if((parseFloat(uvIndex)>=6)&&(parseFloat(uvIndex) < 8)){
+  else if((parseFloat(uvIndex)>=6.0)&&(parseFloat(uvIndex) < 8.0)){
     // change color to orange
     uvEle.addClass("orange");
   }
-  else if((parseFloat(uvIndex)>=8)&&(parseFloat(uvIndex) <= 10)){
+  else if((parseFloat(uvIndex)>=8.0)&&(parseFloat(uvIndex) <= 10.0)){
     // change color to red
     uvEle.addClass("red");
   }
-  else if(parseFloat(uvIndex)> 10){
+  else if(parseFloat(uvIndex)> 10.0){
     // change color to violet
     uvEle.addClass("violet");
   }
