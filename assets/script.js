@@ -7,6 +7,7 @@ var humidEle = $("#humid");
 var windEle = $("#wind");
 var uvEle = $("#uvp");
 var currentCity = $("#currentCity");
+var cardRow = $("#cardRow");
 
 // searched cities added to page as button
 $("#searchBtn").on("click", function (event) {
@@ -57,6 +58,7 @@ function cityWeather(searchTerm) {
     currentCity.append(weatherIcon);
     latitude = response.coord.lat;
     longitude = response.coord.lon;
+    fiveCards(latitude, longitude);
     var uvSearch =
       "http://api.openweathermap.org/data/2.5/uvi?lat=" +
       latitude +
@@ -76,7 +78,43 @@ function cityWeather(searchTerm) {
 }
 
 // create function to create cards out of the 5-day forecast
-
+function fiveCards(lat,lon){
+  // delete previous cards
+  cardRow.html("");
+  // create call to API
+  
+  var fiveDay = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + apiKey;
+  $.ajax({
+    url: fiveDay,
+    method: "GET",
+  }).then(function(response){
+    console.log(response);
+    // iterate over each of the days in the 5 day forecast
+    for (var i=1; i<6; i++){
+      console.log(response.daily[i]);
+      // get forecast date
+    var startDate = new Date(response.daily[i].dt * 1000);
+    startDate = startDate.toLocaleDateString();
+    var displayDate = startDate.slice(0, 15);
+    // create card elements
+      var newCard = $("<div>").attr("class", "card");
+      var cardBody = $("<div>").attr("class", "card-body");
+      var cardDate = $("<h5>").attr("class", "card-title");
+      var cardImage = $("<img>").attr("class", "card-img").attr("src", "https:///openweathermap.org/img/w/" + response.daily[i].weather[0].icon + ".png");
+      cardDate.text(displayDate);
+      var cardTemp = $("<p>").attr("class", "card-text");
+      var cardHumidity = $("<p>").attr("class", "card-text");
+      cardTemp.text("Temperature: " + response.daily[i].temp.day + " F");
+      cardHumidity.text("Humidity: " + response.daily[i].humidity + "%");
+      cardRow.append(newCard);
+      newCard.append(cardBody);
+      cardBody.append(cardDate);
+      cardBody.append(cardImage);
+      cardBody.append(cardTemp);
+      cardBody.append(cardHumidity);
+  }
+  });
+}
 
 // create function that changes the displayed city with a button click
 $(document).on("click", ".list-group-item", function (event) {
