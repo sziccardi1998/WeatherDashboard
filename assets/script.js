@@ -8,20 +8,23 @@ var windEle = $("#wind");
 var uvEle = $("#uvp");
 var currentCity = $("#currentCity");
 var cardRow = $("#cardRow");
+var lastCity = "";
 
 // searched cities added to page as button
 $("#searchBtn").on("click", function (event) {
   event.preventDefault();
   var city = citySearch.val();
   city = city.trim();
-  if (city !== ""){var newButton = $("<button>");
-  newButton.addClass("list-group-item").addClass("list-group-item-action");
-  newButton.text(city);
-  newButton.attr("type", "button");
-  searchedCities.append(newButton);
-  citySearch.val("");
-  newButton.attr("id", city);
-  cityWeather(city);}
+  if (city !== "") {
+    var newButton = $("<button>");
+    newButton.addClass("list-group-item").addClass("list-group-item-action");
+    newButton.text(city);
+    newButton.attr("type", "button");
+    searchedCities.append(newButton);
+    citySearch.val("");
+    newButton.attr("id", city);
+    cityWeather(city);
+  }
 });
 
 // create function to handle ajax calls
@@ -31,6 +34,10 @@ function cityWeather(searchTerm) {
     searchTerm +
     "&appid=" +
     apiKey;
+
+  // save serach term as the current last searched
+  lastCity = searchTerm;
+  saveSearch(searchTerm);
 
   $.ajax({
     url: search,
@@ -51,8 +58,11 @@ function cityWeather(searchTerm) {
     var displayDate = startDate.slice(4, 15);
     console.log(displayDate);
 
-   // create img to hold weather icon
-   var weatherIcon = $("<img>").attr("src", "https:///openweathermap.org/img/w/" + response.weather[0].icon + ".png");
+    // create img to hold weather icon
+    var weatherIcon = $("<img>").attr(
+      "src",
+      "https:///openweathermap.org/img/w/" + response.weather[0].icon + ".png"
+    );
 
     currentCity.text(response.name + " (" + displayDate + ")");
     currentCity.append(weatherIcon);
@@ -78,33 +88,47 @@ function cityWeather(searchTerm) {
 }
 
 // create function to create cards out of the 5-day forecast
-function fiveCards(lat,lon){
+function fiveCards(lat, lon) {
   // delete previous cards
   cardRow.html("");
   // create call to API
-  
-  var fiveDay = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + apiKey;
+
+  var fiveDay =
+    "https://api.openweathermap.org/data/2.5/onecall?lat=" +
+    lat +
+    "&lon=" +
+    lon +
+    "&units=imperial&appid=" +
+    apiKey;
   $.ajax({
     url: fiveDay,
     method: "GET",
-  }).then(function(response){
+  }).then(function (response) {
     console.log(response);
     // iterate over each of the days in the 5 day forecast
-    for (var i=1; i<6; i++){
+    for (var i = 1; i < 6; i++) {
       console.log(response.daily[i]);
       // get forecast date
-    var startDate = new Date(response.daily[i].dt * 1000);
-    startDate = startDate.toLocaleDateString();
-    var displayDate = startDate.slice(0, 15);
-    // create card elements
+      var startDate = new Date(response.daily[i].dt * 1000);
+      startDate = startDate.toLocaleDateString();
+      var displayDate = startDate.slice(0, 15);
+      // create card elements
       var newCard = $("<div>").attr("class", "card");
+      newCard.addClass("col-2");
       var cardBody = $("<div>").attr("class", "card-body");
-      var cardDate = $("<h5>").attr("class", "card-title");
-      var cardImage = $("<img>").attr("class", "card-img").attr("src", "https:///openweathermap.org/img/w/" + response.daily[i].weather[0].icon + ".png");
+      var cardDate = $("<h6>").attr("class", "card-title");
+      var cardImage = $("<img>")
+        .attr("class", "card-img")
+        .attr(
+          "src",
+          "https:///openweathermap.org/img/w/" +
+            response.daily[i].weather[0].icon +
+            ".png"
+        );
       cardDate.text(displayDate);
       var cardTemp = $("<p>").attr("class", "card-text");
       var cardHumidity = $("<p>").attr("class", "card-text");
-      cardTemp.text("Temperature: " + response.daily[i].temp.day + " F");
+      cardTemp.text("Temp: " + response.daily[i].temp.day + " F");
       cardHumidity.text("Humidity: " + response.daily[i].humidity + "%");
       cardRow.append(newCard);
       newCard.append(cardBody);
@@ -112,42 +136,49 @@ function fiveCards(lat,lon){
       cardBody.append(cardImage);
       cardBody.append(cardTemp);
       cardBody.append(cardHumidity);
-  }
+    }
   });
 }
 
 // create function that changes the displayed city with a button click
 $(document).on("click", ".list-group-item", function (event) {
-    event.stopPropagation();
-    var newCity = $(this).attr("id");
+  event.stopPropagation();
+  var newCity = $(this).attr("id");
   console.log(newCity);
   cityWeather(newCity);
 });
 
-
 // create function to change the styling of the UV index to match conditions
-function uvCheck(){
+function uvCheck() {
   var uvIndex = uvEle.text();
   console.log(uvIndex);
   uvEle.attr("class", "");
-  if(parseFloat(uvIndex) < 3){
+  if (parseFloat(uvIndex) < 3) {
     // change color to green
     uvEle.addClass("green");
-  }
-  else if (((parseFloat(uvIndex))>= 3.0)&&(parseFloat(uvIndex) < 6.0)){
+  } else if (parseFloat(uvIndex) >= 3.0 && parseFloat(uvIndex) < 6.0) {
     // change color to yellow
     uvEle.addClass("yellow");
-  } 
-  else if((parseFloat(uvIndex)>=6.0)&&(parseFloat(uvIndex) < 8.0)){
+  } else if (parseFloat(uvIndex) >= 6.0 && parseFloat(uvIndex) < 8.0) {
     // change color to orange
     uvEle.addClass("orange");
-  }
-  else if((parseFloat(uvIndex)>=8.0)&&(parseFloat(uvIndex) <= 10.0)){
+  } else if (parseFloat(uvIndex) >= 8.0 && parseFloat(uvIndex) <= 10.0) {
     // change color to red
     uvEle.addClass("red");
-  }
-  else if(parseFloat(uvIndex)> 10.0){
+  } else if (parseFloat(uvIndex) > 10.0) {
     // change color to violet
     uvEle.addClass("violet");
   }
 }
+
+// create function to save the last searched city to local storage
+function saveSearch(search) {
+  localStorage.setItem("storedSearch", search);
+}
+
+function getSearch() {
+  var recoveredSearch = localStorage.getItem("storedSearch");
+  cityWeather(recoveredSearch);
+}
+
+getSearch();

@@ -2,6 +2,11 @@ ul {
     list-style-type: none;
 }
 
+li {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
 .green {
     background-color: green;
 }
@@ -20,4 +25,33 @@ ul {
 
 .violet {
     background-color: violet;
+}
+
+.card-img {
+    scale: 40%;
+}
+
+.card {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 15px;
+    background-color: lightskyblue;
+}
+
+.navbar {
+    background-color: black;
+}
+
+.navbar-text {
+    color: white;
+    text-align: center;
+}
+
+.container-fluid {
+    margin-top: 5px;
+}
+
+.list-group-item {
+    background-color: lightskyblue;
+    color: black;
 }
