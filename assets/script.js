@@ -70,7 +70,7 @@ function cityWeather(searchTerm) {
     longitude = response.coord.lon;
     fiveCards(latitude, longitude);
     var uvSearch =
-      "http://api.openweathermap.org/data/2.5/uvi?lat=" +
+      "https://api.openweathermap.org/data/2.5/uvi?lat=" +
       latitude +
       "&lon=" +
       longitude +
